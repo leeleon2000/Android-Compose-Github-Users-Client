@@ -5,16 +5,18 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.leonlee.githubclient.common.network.NetworkConfig
 import com.leonlee.githubclient.common.network.ResultCallAdapterFactory
+import com.leonlee.githubclient.feature.users.UserRepository
 import com.leonlee.githubclient.feature.users.UserService
+import com.leonlee.githubclient.feature.users.list.UserListViewModel
 import com.leonlee.githubclient.ui.theme.GithubUserClientTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,31 +38,27 @@ data class User(val name: String?)
 
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var userListViewModel: UserListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val retrofit = Retrofit.Builder().baseUrl("https://api.github.com")
+            .addConverterFactory(NetworkConfig.json.asConverterFactory("application/json; charset=utf-8".toMediaType()))
+            .addCallAdapterFactory(ResultCallAdapterFactory())
+            .build()
+        val service = retrofit.create(UserService::class.java)
+        userListViewModel = UserListViewModel(UserRepository(service))
+
         setContent {
             GithubUserClientTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    GithubUserClientApp(userListViewModel)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    GithubUserClientTheme {
-        Greeting("Android")
     }
 }
