@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -46,7 +47,8 @@ fun UserListItem(modelItem: UserListModelItem) {
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.size(12.dp))
-            Text(text = modelItem.login, fontSize = 28.sp)
+            Text(text = modelItem.login, fontSize = 24.sp, modifier = Modifier.align(alignment = Alignment.CenterVertically)
+            )
         }
     }
 }
