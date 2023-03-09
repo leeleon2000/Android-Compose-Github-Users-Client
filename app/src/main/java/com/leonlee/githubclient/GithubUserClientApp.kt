@@ -20,15 +20,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.leonlee.githubclient.common.network.NetworkConfig
+import com.leonlee.githubclient.feature.users.UserRepository
+import com.leonlee.githubclient.feature.users.UserService
 import com.leonlee.githubclient.feature.users.list.UserListScreen
 import com.leonlee.githubclient.feature.users.list.UserListViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.create
 
-enum class GitHubUserClientScreen(@StringRes val title: Int) {
+
+private enum class GitHubUserClientScreen(@StringRes val title: Int) {
     List(R.string.user_list),
     Detail(R.string.user_detail)
 }
@@ -36,7 +47,7 @@ enum class GitHubUserClientScreen(@StringRes val title: Int) {
 private val startScreen = GitHubUserClientScreen.List
 
 @Composable
-fun CupcakeAppBar(
+private fun CupcakeAppBar(
     currentScreen: GitHubUserClientScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
@@ -60,7 +71,6 @@ fun CupcakeAppBar(
 
 @Composable
 fun GithubUserClientApp(
-    userListViewModel: UserListViewModel,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -68,6 +78,9 @@ fun GithubUserClientApp(
     val currentScreen = GitHubUserClientScreen.valueOf(
         backStackEntry?.destination?.route ?: startScreen.name
     )
+
+    val userListViewModel = koinViewModel<UserListViewModel>()
+
 
     Scaffold(
         topBar = {

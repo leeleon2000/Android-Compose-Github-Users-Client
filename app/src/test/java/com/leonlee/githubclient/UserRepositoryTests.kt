@@ -31,7 +31,7 @@ class UserRepositoryTests {
     fun setUp() {
         server = MockWebServer()
         val retrofit = Retrofit.Builder().baseUrl(server.url("/"))
-            .addConverterFactory(NetworkConfig.json.asConverterFactory("application/json; charset=utf-8".toMediaType()))
+            .addConverterFactory(NetworkConfig.JSON.asConverterFactory("application/json; charset=utf-8".toMediaType()))
             .addCallAdapterFactory(ResultCallAdapterFactory())
             .build()
         val service = retrofit.create(UserService::class.java)
