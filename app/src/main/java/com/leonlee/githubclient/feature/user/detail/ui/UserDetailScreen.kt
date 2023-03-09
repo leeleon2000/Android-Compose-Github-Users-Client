@@ -45,11 +45,16 @@ fun UserDetailScreen(viewModel: UserDetailViewModel) {
         UserDetailTextView(image = Icons.Rounded.Web, text = userDetail.blog)
         UserDetailTextView(image = Icons.Rounded.Place, text = userDetail.location)
         UserDetailTextView(image = Icons.Rounded.Business, text = userDetail.company)
+        Spacer(modifier = Modifier.size(4.dp))
         if(userDetail.followers != null && userDetail.following != null) {
             Row {
                 Text(text = userDetail.followers.toString() + " " + stringResource(R.string.followers))
                 Text(text = ", " + userDetail.following.toString() + " " + stringResource(R.string.following))
             }
+        }
+        if(userDetail.publicRepos != null){
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(text = userDetail.publicRepos.toString() + " " + stringResource(R.string.repos))
         }
     }
 }

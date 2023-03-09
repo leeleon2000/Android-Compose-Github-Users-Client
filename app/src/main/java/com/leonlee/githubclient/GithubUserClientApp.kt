@@ -75,6 +75,8 @@ fun GithubUserClientApp(
     val userListViewModel = koinViewModel<UserListViewModel>()
     val userDetailViewModel = koinViewModel<UserDetailViewModel>()
 
+    userListViewModel.start()
+
     Scaffold(
         topBar = {
             CupcakeAppBar(

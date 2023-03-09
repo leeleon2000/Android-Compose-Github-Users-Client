@@ -20,10 +20,9 @@ class UserListViewModel(private val userRepository: UserRepository) : ViewModel(
     private val _userList = MutableStateFlow<Result<List<UserListModelItem>>>(Result.success(listOf()))
     val userList = _userList.asStateFlow()
 
-    init {
+    fun start(){
         getUserLists()
     }
-
     private fun getUserLists() {
         viewModelScope.launch {
             _userList.emit(userRepository.listUser())

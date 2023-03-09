@@ -11,7 +11,11 @@ package com.leonlee.githubclient.common.network
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.internal.addHeaderLenient
 import retrofit2.Retrofit
+
 
 class NetworkConfig {
     companion object {
@@ -20,10 +24,16 @@ class NetworkConfig {
         val JSON = Json {
             ignoreUnknownKeys = true
         }
-        fun createRetrofit(): Retrofit {
+        val httpClient = OkHttpClient.Builder().addNetworkInterceptor {chain ->
+            val requestBuilder: Request.Builder = chain.request().newBuilder()
+            requestBuilder.header("User-Agent", "request")
+            return@addNetworkInterceptor chain.proceed(requestBuilder.build())
+        }.build()
+        fun createRetrofit(client: OkHttpClient = httpClient): Retrofit {
             return Retrofit.Builder().baseUrl(HOST)
                 .addConverterFactory(NetworkConfig.JSON.asConverterFactory(JSON_MEDIA_TYPE))
                 .addCallAdapterFactory(ResultCallAdapterFactory())
+                .client(client)
                 .build()
         }
     }
