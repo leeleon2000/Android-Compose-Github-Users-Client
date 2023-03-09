@@ -3,8 +3,8 @@ package com.leonlee.githubclient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.leonlee.githubclient.common.network.NetworkConfig
 import com.leonlee.githubclient.common.network.ResultCallAdapterFactory
-import com.leonlee.githubclient.feature.users.UserRepository
-import com.leonlee.githubclient.feature.users.UserService
+import com.leonlee.githubclient.feature.user.UserRepository
+import com.leonlee.githubclient.feature.user.UserService
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,12 +1,12 @@
 /*
  * *
- *  * Created by Leon on 06/03/2023, 12:57
+ *  * Created by Leon on 09/03/2023, 12:24
  *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 06/03/2023, 12:57
+ *  * Last modified 08/03/2023, 13:56
  *
  */
 
-package com.leonlee.githubclient.feature.users.list.model
+package com.leonlee.githubclient.feature.user.list.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -3,4 +3,7 @@
     <string name="avatar_image_desc">avatar image</string>
     <string name="user_list">User List</string>
     <string name="user_detail">User Detail</string>
+    <string name="icon">icon</string>
+    <string name="followers">Followers</string>
+    <string name="following">following</string>
 </resources>

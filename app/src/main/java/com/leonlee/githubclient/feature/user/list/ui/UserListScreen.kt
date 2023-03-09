@@ -1,13 +1,13 @@
 /*
  * *
- *  * Created by Leon on 07/03/2023, 13:57
+ *  * Created by Leon on 09/03/2023, 12:46
  *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 07/03/2023, 13:57
+ *  * Last modified 09/03/2023, 12:24
  *
  */
 
 
-package com.leonlee.githubclient.feature.users.list
+package com.leonlee.githubclient.feature.user.list.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -27,17 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.leonlee.githubclient.R
-import com.leonlee.githubclient.feature.users.list.model.UserListModelItem
+import com.leonlee.githubclient.feature.user.list.UserListViewModel
+import com.leonlee.githubclient.feature.user.list.data.UserListModelItem
 import com.leonlee.githubclient.ui.theme.GithubUserClientTheme
 
 
 @Composable
-fun UserListItem(modelItem: UserListModelItem) {
+fun UserListItem(modelItem: UserListModelItem, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
-            .clickable { },
+            .clickable(onClick = { onClick(modelItem.login) }),
     ) {
         Row(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
@@ -47,19 +48,22 @@ fun UserListItem(modelItem: UserListModelItem) {
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.size(12.dp))
-            Text(text = modelItem.login, fontSize = 24.sp, modifier = Modifier.align(alignment = Alignment.CenterVertically)
+            Text(
+                text = modelItem.login,
+                fontSize = 24.sp,
+                modifier = Modifier.align(alignment = Alignment.CenterVertically)
             )
         }
     }
 }
 
 @Composable
-fun UserListScreen(viewModel: UserListViewModel) {
+fun UserListScreen(viewModel: UserListViewModel, onUserClicked: (String) -> (Unit)) {
     val listResult by viewModel.userList.collectAsState()
     val lists = listResult.getOrNull() ?: return
     LazyColumn {
         items(items = lists, key = { it.id }) {
-            UserListItem(it)
+            UserListItem(it) { name -> onUserClicked(name) }
         }
     }
 }
@@ -68,6 +72,6 @@ fun UserListScreen(viewModel: UserListViewModel) {
 @Composable
 fun UserListScreenPreview() {
     GithubUserClientTheme {
-        UserListItem(UserListModelItem())
+        UserListItem(UserListModelItem(login = "test")) {}
     }
 }

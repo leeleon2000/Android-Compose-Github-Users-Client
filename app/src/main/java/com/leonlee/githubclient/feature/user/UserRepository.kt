@@ -1,12 +1,12 @@
 /*
  * *
- *  * Created by Leon on 07/03/2023, 05:19
+ *  * Created by Leon on 09/03/2023, 12:23
  *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 07/03/2023, 05:19
+ *  * Last modified 09/03/2023, 12:23
  *
  */
 
-package com.leonlee.githubclient.feature.users
+package com.leonlee.githubclient.feature.user
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +17,11 @@ class UserRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    suspend fun getUser(name: String) = withContext(dispatcher){
+    suspend fun getUser(name: String) = withContext(dispatcher) {
         return@withContext userService.getUser(name)
     }
 
-    suspend fun listUser() = withContext(dispatcher){
+    suspend fun listUser() = withContext(dispatcher) {
         return@withContext userService.listUser()
     }
 }

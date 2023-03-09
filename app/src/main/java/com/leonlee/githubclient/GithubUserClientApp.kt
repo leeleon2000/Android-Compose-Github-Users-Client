@@ -20,23 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.leonlee.githubclient.common.network.NetworkConfig
-import com.leonlee.githubclient.feature.users.UserRepository
-import com.leonlee.githubclient.feature.users.UserService
-import com.leonlee.githubclient.feature.users.list.UserListScreen
-import com.leonlee.githubclient.feature.users.list.UserListViewModel
+import com.leonlee.githubclient.feature.user.detail.UserDetailViewModel
+import com.leonlee.githubclient.feature.user.detail.ui.UserDetailScreen
+import com.leonlee.githubclient.feature.user.list.ui.UserListScreen
+import com.leonlee.githubclient.feature.user.list.UserListViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.create
 
 
 private enum class GitHubUserClientScreen(@StringRes val title: Int) {
@@ -80,7 +73,7 @@ fun GithubUserClientApp(
     )
 
     val userListViewModel = koinViewModel<UserListViewModel>()
-
+    val userDetailViewModel = koinViewModel<UserDetailViewModel>()
 
     Scaffold(
         topBar = {
@@ -97,7 +90,13 @@ fun GithubUserClientApp(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = GitHubUserClientScreen.List.name) {
-                UserListScreen(userListViewModel)
+                UserListScreen(viewModel = userListViewModel){
+                    userDetailViewModel.getUserDetail(it)
+                    navController.navigate(GitHubUserClientScreen.Detail.name)
+                }
+            }
+            composable(route = GitHubUserClientScreen.Detail.name){
+                UserDetailScreen(viewModel = userDetailViewModel)
             }
         }
     }

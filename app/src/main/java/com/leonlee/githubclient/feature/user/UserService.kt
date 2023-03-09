@@ -1,15 +1,15 @@
 /*
  * *
- *  * Created by Leon on 06/03/2023, 09:31
+ *  * Created by Leon on 09/03/2023, 12:23
  *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 06/03/2023, 09:31
+ *  * Last modified 08/03/2023, 13:56
  *
  */
 
-package com.leonlee.githubclient.feature.users
+package com.leonlee.githubclient.feature.user
 
-import com.leonlee.githubclient.feature.users.detail.model.UserDetailModel
-import com.leonlee.githubclient.feature.users.list.model.UserListModelItem
+import com.leonlee.githubclient.feature.user.detail.data.UserDetailModel
+import com.leonlee.githubclient.feature.user.list.data.UserListModelItem
 import retrofit2.http.GET
 import retrofit2.http.Path
 

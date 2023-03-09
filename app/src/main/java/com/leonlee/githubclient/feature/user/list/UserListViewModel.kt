@@ -1,17 +1,17 @@
 /*
  * *
- *  * Created by Leon on 07/03/2023, 12:14
+ *  * Created by Leon on 09/03/2023, 12:23
  *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 07/03/2023, 12:14
+ *  * Last modified 08/03/2023, 13:56
  *
  */
 
-package com.leonlee.githubclient.feature.users.list
+package com.leonlee.githubclient.feature.user.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.leonlee.githubclient.feature.users.UserRepository
-import com.leonlee.githubclient.feature.users.list.model.UserListModelItem
+import com.leonlee.githubclient.feature.user.UserRepository
+import com.leonlee.githubclient.feature.user.list.data.UserListModelItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
