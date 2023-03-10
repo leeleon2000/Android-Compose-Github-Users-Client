@@ -47,9 +47,10 @@ class UserListViewModelTest {
         )
         viewModel.start()
         advanceUntilIdle()
-        TestCase.assertTrue(viewModel.userListState.value.isSuccess)
-        TestCase.assertEquals(2, viewModel.userListState.value.getOrThrow().size)
-        TestCase.assertEquals("testImage", viewModel.userListState.value.getOrThrow()[0].avatarUrl)
+        TestCase.assertTrue(viewModel.userListState.value is UserListViewState.SuccessList)
+        val result = viewModel.userListState.value as UserListViewState.SuccessList
+        TestCase.assertEquals(2, result.list.size)
+        TestCase.assertEquals("testImage", result.list[0].avatarUrl)
     }
 
 }

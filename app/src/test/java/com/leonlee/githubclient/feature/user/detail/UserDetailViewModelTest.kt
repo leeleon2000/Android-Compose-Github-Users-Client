@@ -12,6 +12,7 @@ package com.leonlee.githubclient.feature.user.detail
 
 import com.leonlee.githubclient.feature.user.UserRepository
 import com.leonlee.githubclient.feature.user.detail.data.UserDetailModel
+import com.leonlee.githubclient.feature.user.list.UserListViewState
 import io.mockk.*
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
@@ -48,9 +49,10 @@ class UserDetailViewModelTest {
         )
         viewModel.getUserDetail("test")
         advanceUntilIdle()
-        assertTrue(viewModel.userDetail.value.isSuccess)
-        assertEquals("test", viewModel.userDetail.value.getOrThrow().login)
-        assertEquals("testimage", viewModel.userDetail.value.getOrThrow().avatarUrl)
+        assertTrue(viewModel.userDetail.value is UserDetailViewState.Success)
+        val detail = viewModel.userDetail.value as UserDetailViewState.Success
+        assertEquals("test", detail.userDetail.login)
+        assertEquals("testimage", detail.userDetail.avatarUrl)
     }
 
 }
