@@ -13,7 +13,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.internal.addHeaderLenient
 import retrofit2.Retrofit
 
 
@@ -26,12 +25,14 @@ class NetworkConfig {
         }
         val httpClient = OkHttpClient.Builder().addNetworkInterceptor {chain ->
             val requestBuilder: Request.Builder = chain.request().newBuilder()
-            requestBuilder.header("User-Agent", "request")
+            requestBuilder
+                .header("User-Agent", "request")
+                .header("Connection", "close")
             return@addNetworkInterceptor chain.proceed(requestBuilder.build())
         }.build()
         fun createRetrofit(client: OkHttpClient = httpClient): Retrofit {
             return Retrofit.Builder().baseUrl(HOST)
-                .addConverterFactory(NetworkConfig.JSON.asConverterFactory(JSON_MEDIA_TYPE))
+                .addConverterFactory(JSON.asConverterFactory(JSON_MEDIA_TYPE))
                 .addCallAdapterFactory(ResultCallAdapterFactory())
                 .client(client)
                 .build()
