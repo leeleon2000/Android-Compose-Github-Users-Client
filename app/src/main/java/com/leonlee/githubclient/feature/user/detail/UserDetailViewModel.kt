@@ -12,19 +12,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leonlee.githubclient.feature.user.UserRepository
 import com.leonlee.githubclient.feature.user.detail.data.UserDetailModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class UserDetailViewModel(private val userRepository: UserRepository): ViewModel() {
 
-    private val _userDetail = MutableStateFlow(Result.success(UserDetailModel()))
-    val userDetail = _userDetail.asStateFlow()
+sealed class UserDetailViewState {
+    object Loading : UserDetailViewState()
+    object Error : UserDetailViewState()
+    class Success(val userDetail: UserDetailModel) : UserDetailViewState()
+}
 
-    fun getUserDetail(name: String){
-        viewModelScope.launch {
-            _userDetail.emit(userRepository.getUser(name))
+class UserDetailViewModel(private val userRepository: UserRepository) : ViewModel() {
+
+    private val _userDetailState =
+        MutableStateFlow<UserDetailViewState>(UserDetailViewState.Loading)
+    val userDetail = _userDetailState.asStateFlow()
+
+    fun getUserDetail(name: String) = viewModelScope.launch {
+        if((_userDetailState.value as? UserDetailViewState.Success)?.userDetail?.name == name){
+            return@launch
         }
+        _userDetailState.emit(UserDetailViewState.Loading)
+        userRepository.getUser(name).fold(
+            onSuccess = {
+                _userDetailState.emit(UserDetailViewState.Success(it))
+            }, onFailure = {
+                _userDetailState.emit(UserDetailViewState.Error)
+            })
     }
 }

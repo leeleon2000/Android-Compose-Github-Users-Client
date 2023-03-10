@@ -11,8 +11,10 @@ package com.leonlee.githubclient.feature.user.detail.ui
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,30 +36,53 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.leonlee.githubclient.R
 import com.leonlee.githubclient.feature.user.detail.UserDetailViewModel
+import com.leonlee.githubclient.feature.user.detail.UserDetailViewState
 import com.leonlee.githubclient.feature.user.detail.data.UserDetailModel
 import com.leonlee.githubclient.ui.theme.GithubUserClientTheme
 
 @Composable
 fun UserDetailScreen(viewModel: UserDetailViewModel) {
     val userDetailResult by viewModel.userDetail.collectAsState()
-    val userDetail = userDetailResult.getOrNull() ?: return
-    Column(modifier = Modifier.padding(24.dp)) {
-        UserPhotoView(userDetail)
-        Spacer(modifier = Modifier.size(32.dp))
-        UserDetailTextView(image = Icons.Rounded.Email, text = userDetail.email)
-        UserDetailTextView(image = Icons.Rounded.Web, text = userDetail.blog)
-        UserDetailTextView(image = Icons.Rounded.Place, text = userDetail.location)
-        UserDetailTextView(image = Icons.Rounded.Business, text = userDetail.company)
-        Spacer(modifier = Modifier.size(4.dp))
-        if(userDetail.followers != null && userDetail.following != null) {
-            Row {
-                Text(text = userDetail.followers.toString() + " " + stringResource(R.string.followers))
-                Text(text = ", " + userDetail.following.toString() + " " + stringResource(R.string.following))
+
+    when(userDetailResult){
+        UserDetailViewState.Error -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier.align(Alignment.Center),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Loading Error")
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
             }
         }
-        if(userDetail.publicRepos != null){
-            Spacer(modifier = Modifier.size(4.dp))
-            Text(text = userDetail.publicRepos.toString() + " " + stringResource(R.string.repos))
+        UserDetailViewState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+        is UserDetailViewState.Success -> {
+            val userDetailSuccess = userDetailResult as? UserDetailViewState.Success ?: return
+            val userDetail = userDetailSuccess.userDetail
+            Column(modifier = Modifier.padding(24.dp)) {
+                UserPhotoView(userDetail)
+                Spacer(modifier = Modifier.size(32.dp))
+                UserDetailTextView(image = Icons.Rounded.Email, text = userDetail.email)
+                UserDetailTextView(image = Icons.Rounded.Web, text = userDetail.blog)
+                UserDetailTextView(image = Icons.Rounded.Place, text = userDetail.location)
+                UserDetailTextView(image = Icons.Rounded.Business, text = userDetail.company)
+                Spacer(modifier = Modifier.size(4.dp))
+                if(userDetail.followers != null && userDetail.following != null) {
+                    Row {
+                        Text(text = userDetail.followers.toString() + " " + stringResource(R.string.followers))
+                        Text(text = ", " + userDetail.following.toString() + " " + stringResource(R.string.following))
+                    }
+                }
+                if(userDetail.publicRepos != null){
+                    Spacer(modifier = Modifier.size(4.dp))
+                    Text(text = userDetail.publicRepos.toString() + " " + stringResource(R.string.repos))
+                }
+            }
         }
     }
 }

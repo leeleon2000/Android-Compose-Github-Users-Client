@@ -11,8 +11,6 @@
 package com.leonlee.githubclient.feature.user.list
 
 import com.leonlee.githubclient.feature.user.UserRepository
-import com.leonlee.githubclient.feature.user.detail.UserDetailViewModel
-import com.leonlee.githubclient.feature.user.detail.data.UserDetailModel
 import com.leonlee.githubclient.feature.user.list.data.UserListModelItem
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -25,7 +23,6 @@ import org.junit.Assert.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.log
 
 class UserListViewModelTest {
 
@@ -50,9 +47,9 @@ class UserListViewModelTest {
         )
         viewModel.start()
         advanceUntilIdle()
-        TestCase.assertTrue(viewModel.userList.value.isSuccess)
-        TestCase.assertEquals(2, viewModel.userList.value.getOrThrow().size)
-        TestCase.assertEquals("testImage", viewModel.userList.value.getOrThrow()[0].avatarUrl)
+        TestCase.assertTrue(viewModel.userListState.value.isSuccess)
+        TestCase.assertEquals(2, viewModel.userListState.value.getOrThrow().size)
+        TestCase.assertEquals("testImage", viewModel.userListState.value.getOrThrow()[0].avatarUrl)
     }
 
 }

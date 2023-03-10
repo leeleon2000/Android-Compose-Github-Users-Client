@@ -16,16 +16,31 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class UserListViewModel(private val userRepository: UserRepository) : ViewModel() {
-    private val _userList = MutableStateFlow<Result<List<UserListModelItem>>>(Result.success(listOf()))
-    val userList = _userList.asStateFlow()
+sealed class UserListViewState {
+    object Loading : UserListViewState()
+    object Error : UserListViewState()
+    class SuccessList(val list: List<UserListModelItem>) : UserListViewState()
+}
 
-    fun start(){
+class UserListViewModel(private val userRepository: UserRepository) : ViewModel() {
+    private val _userListState = MutableStateFlow<UserListViewState>(UserListViewState.Loading)
+    val userListState = _userListState.asStateFlow()
+
+    fun start() = viewModelScope.launch {
+        if(_userListState.value is UserListViewState.SuccessList){
+            return@launch
+        }
+        _userListState.emit(UserListViewState.Loading)
         getUserLists()
     }
-    private fun getUserLists() {
-        viewModelScope.launch {
-            _userList.emit(userRepository.listUser())
-        }
+
+    private fun getUserLists() = viewModelScope.launch {
+        userRepository.listUser().fold(
+            onSuccess = {
+                        _userListState.emit(UserListViewState.SuccessList(it))
+            },
+            onFailure = {
+                _userListState.emit(UserListViewState.Error)
+            })
     }
 }
