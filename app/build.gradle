@@ -4,14 +4,6 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization'
 }
 android {
-    signingConfigs {
-        release {
-            storeFile file('C:\\Users\\aleel\\release.jks')
-            storePassword 'release'
-            keyAlias 'release'
-            keyPassword 'release'
-        }
-    }
     namespace 'com.leonlee.githubclient'
     compileSdk 33
 
@@ -32,15 +24,14 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     buildFeatures {
         compose true
