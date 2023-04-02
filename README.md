@@ -52,6 +52,11 @@ flowchart LR
     UserRepository--userDetail-->UserDetailViewModel--state-->UserDetailScreen;
 ```
 ---
+
+## Github action release 
+push git tag v* will create a release version automatically by github actoins
+
+
 ### Future improvements
 - login
 - follow users
